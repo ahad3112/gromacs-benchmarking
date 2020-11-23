@@ -3,14 +3,17 @@
 ## Dependencies
 
 * `Python 3.6 of above`
-* `ReFrame`
+* [ReFrame](https://reframe-hpc.readthedocs.io/en/stable/index.html)
 
 ###### Installation of [ReFrame](https://reframe-hpc.readthedocs.io/en/stable/index.html) with `pip`
     pip install reframe-hpc
 
 ---
 
-## Usage
+## Usage of `gmxbm.py`
+### `run` module
+The job of this module is to generate appropriate test cases based on the user's input and initiate [ReFrame](https://reframe-hpc.readthedocs.io/en/stable/index.html) to start benchmarking.
+
 The usage of the tools is done in two steps as follows:
 
 1. Configuring Machine settings.
@@ -22,7 +25,7 @@ The usage of the tools is done in two steps as follows:
 #### Running gmxbm.py
 
     $ ./gmxbm.py run -h/--help
-    usage: gmxbm.py run [-h] -i INPUT [-C CONFIG_FILE]
+    usage: ./gmxbm.py run [-h] -i INPUT [-C CONFIG_FILE]
                         [--machines [cluster:partition [cluster:partition ...]]]
                         [--prog-envs [PROG_ENVS [PROG_ENVS ...]]]
                         [--nnodes NNODES] [--nprocs NPROCS] [--ntomp NTOMP]
@@ -122,3 +125,11 @@ The content of `reframe.out` is the `stdout` message from [ReFrame](https://refr
 
 
 In addition to the above folders, [ReFrame](https://reframe-hpc.readthedocs.io/en/stable/index.html) also generates two temporary folders named `stage` and `output` within the output directory. `stage` folders contains generated job related scripts and output from `GROMACS`. Once the test is done, job related scripts are moved to `output` directory and `GROMACS` outputs are deleted.
+
+### `aggregate` module
+The job of this module is to aggregate benchmark results from multiple directories ito a single user specified directory. The ultimate goal with this module is to perform a cron job for data aggregation.
+
+This module accepts a space separated list of input directoris and an output directory.
+
+    $ ./gmxbm.py aggregate -h/--help
+    usage: ./gmxbm.py aggregate [-h] [-i INPUTS [INPUTS ...]] -o OUTPUT

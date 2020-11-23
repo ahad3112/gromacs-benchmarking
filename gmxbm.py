@@ -12,6 +12,7 @@ import sys
 import argparse
 
 from gmxbmcore.cli.run import add_run_cli
+from gmxbmcore.cli.aggregate import add_aggregate_cli
 
 
 
@@ -30,6 +31,7 @@ if __name__ == '__main__':
 
     # adding parsers to the subparsers
     add_run_cli(sub_parsers)
+    add_aggregate_cli(sub_parsers)
 
 
     args = parser.parse_args()
