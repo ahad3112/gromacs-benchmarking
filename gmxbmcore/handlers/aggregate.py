@@ -34,12 +34,33 @@ def handler(args):
                             f'mkdir -p {output_perf_log_path}'
                         )
                         os.system(f'cp {data} {output_perf_log_path}/')
+
+                        if args.verbose:
+                            print('[ {0:^10} ] : {1} to {2}/'.format(
+                                'copied'.upper(),
+                                os.path.join(input_dir, data),
+                                output_perf_log_path
+                            ))
                     else:
                         file = open(os.path.join(args.output, data), 'a')
                         for line in open(data):
                             file.write(line)
+
+                        if args.verbose:
+                            print('[ {0:^10} ] : content of {1} to {2}'.format(
+                                'copied'.upper(),
+                                os.path.join(input_dir, data),
+                                os.path.join(args.output, data)
+                            ))
                 else:
                     if not os.path.exists(os.path.join(args.output, data)):
                         os.system(f'mkdir -p {os.path.join(args.output, data)}')
 
                     os.system(f'cp -r {data}/* {os.path.join(args.output, data)}/')
+
+                    if args.verbose:
+                        print('[ {0:^10} ] : {1}/* to {2}/'.format(
+                            'copied'.upper(),
+                            os.path.join(input_dir, data),
+                            os.path.join(args.output, data)
+                        ))

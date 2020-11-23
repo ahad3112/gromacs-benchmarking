@@ -43,3 +43,6 @@ def add_aggregate_cli(sub_parsers):
                                          'result. If abs path is not provided, '
                                          'path will be resolved relative to '
                                          'current working directory.'))
+
+    aggregate_parser.add_argument('-v', '--verbose', action="store_true",
+                                  help='Enable verbose version.')
