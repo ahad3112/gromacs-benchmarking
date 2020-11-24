@@ -8,7 +8,7 @@
 import os
 import sys
 import glob
-
+import re
 
 def handler(args):
     '''
@@ -42,16 +42,29 @@ def handler(args):
                                 output_perf_log_path
                             ))
                     else:
-                        file = open(os.path.join(args.output, data), 'a')
-                        for line in open(data):
-                            file.write(line)
+                        file = open(os.path.join(args.output, data), 'a+')
+                        file.seek(0, os.SEEK_SET)
+                        current_content = file.read()
+                        file.seek(0, os.SEEK_END)
+                        id_pattern = '[\-0-9T:]*?\|reframe\s*.*?\|id=(.*?)\|.*'
 
-                        if args.verbose:
-                            print('[ {0:^10} ] : content of {1} to {2}'.format(
-                                'copied'.upper(),
-                                os.path.join(input_dir, data),
-                                os.path.join(args.output, data)
-                            ))
+                        for line in open(data):
+                            id = re.search(id_pattern, line).group(1)
+                            if not re.search(id, current_content):
+                                file.write(line)
+                                if args.verbose:
+                                    print('[ {0:^10} ] : content of {1} to {2}'.format(
+                                        'copied'.upper(),
+                                        os.path.join(input_dir, data),
+                                        os.path.join(args.output, data)
+                                    ))
+                            else:
+                                if args.verbose:
+                                    print('[ {0:^10} ] :  {1} already exists in {2}'.format(
+                                        'skipping'.upper(),
+                                        line,
+                                        os.path.join(args.output, data)
+                                    ))
                 else:
                     if not os.path.exists(os.path.join(args.output, data)):
                         os.system(f'mkdir -p {os.path.join(args.output, data)}')
